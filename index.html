@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vishu.ai Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </nav>
+
+        <div class="profile-header">
+            <img src="assets/pfp.jpeg" alt="vishu" class="profile-img">
+            <div class="profile-info">
+                <h1>Hey, I'm Vishu</h1>
+                <div class="social-links">
+                    <button id="show-email" class="social-btn" type="button">
+                      <i class="fas fa-envelope"></i> Email
+                    </button>
+                    <a href="assets/vishu_cv.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> CV</a>
+                    <a href="https://www.linkedin.com/in/tyagi-vishu/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/vishu-tyagi" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+                  </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <p>I'm a data scientist in Carmel Lab at Columbia University. My work focuses on developing Bayesian hierarchical models to model uncertainty and incorporate prior knowledge into analysis of sparse electrophysiological data, with the goal of better understanding movement recovery mechanisms. I received my MS in Mathematics from IIT Kanpur (2021) and MS in Data Science from Columbia University (2022), and have since worked at the intersection of machine learning and neuroscience. I maintain a <a href="blog.html">blog</a> where I share resources and insights from my daily work.</p>
+        </section>
+
+        <section id="papers">
+            <h2 class="section-header"><i class="far fa-file-alt"></i> Papers</h2>
+           
+            <article class="publication">
+                <h3>2024</h3>
+                <p><strong>Tyagi, V.</strong>, Murray, L. M., Asan, A. S., Mandigo, C., Virk, M. S., Harel, N. Y., Carmel, J. B., & McIntosh, J. R. (2024). <em>Hierarchical Bayesian estimation of motor-evoked potential recruitment curves yields accurate and robust estimates. </em><a href="https://doi.org/10.48550/arXiv.2407.08709" target="_blank" rel="noopener">[DOI]</a></p>
+            </article>
+
+        </section>
+
+        <section id="software">
+            <h2 class="section-header"><i class="fas fa-code"></i> Software</h2>
+
+            <article class="software">
+                <h3>hbMEP</h3>
+                <p>Python library for hierarchical Bayesian estimation of motor-evoked potential (MEP) size recruitment curves. <a href="https://github.com/hbmep/hbmep" target="_blank">[GitHub]</a> <a href="https://hbmep.github.io/hbmep/" target="_blank">[Docs]</a></p>
+            </article>
+
+        </section>
+
+        <section id="news">
+            <h2 class="section-header"><i class="fas fa-newspaper"></i> News</h2>
+            
+            <article class="news-item">
+                <h3>March 2025</h3>
+                <p>Carmel Lab receives NIH R03 grant to extend hbMEP for real-time MEP recruitment curve estimation. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-awarded-nih-grant-develop-enhanced-tool-measure-movement-physiology" target="_blank" rel="noopener">[Details]</a></p> </article>
+            <article class="news-item">
+                <h3>October 2024</h3>
+                <p>Presented <em>“Hierarchical Bayesian estimation of motor-evoked potential recruitment curves yields accurate and robust estimates”</em> at the <em>Society for Neuroscience (SfN) Nanosymposium on Analytical Computational Tools</em>, Chicago.</p>
+
+                <h3>May 2024</h3>
+                <p>Received poster award at the <em>11th Annual Minnesota Neuromodulation Symposium</em> for the presentation <em>“Motor evoked potential recruitment curve analysis using hierarchical Bayesian modeling yields accurate and robust estimates.”</em> <a href="assets/mn_neuromodulation_award_2024.jpg" target="_blank" rel="noopener">[View award]</a></p>
+
+                <h3>March 2024</h3>
+                <p>Carmel Lab receives $1.25M CDMRP grant (3 years) to study spinal cord stimulation for restoring arm and hand function after injury. hbMEP will support analysis and optimization of stimulation parameters, including electrode position, orientation, and size. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-receives-1-25-million-cdmrp-grant" target="_blank" rel="noopener">[Details]</a></p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>Copyright &copy; 2025, Vishweshwar Tyagi</p>
+        <p>Contact: <a href="mailto:vt2353@columbia.edu">vt2353@columbia.edu</a></p>
+    </footer>
+    
+    <dialog id="email-dialog" aria-label="Email address">
+        <div class="email-dialog-content">
+          <p style="margin:0 0 .5em 0; color:#333;">Copy my email:</p>
+          <div class="email-copy-row">
+            <input id="email-address" type="text" value="vt2353@columbia.edu" readonly>
+            <button id="copy-email" class="copy-btn" type="button">Copy</button>
+          </div>
+          <form method="dialog" style="margin-top:.8em;">
+            <button class="close-btn">Close</button>
+          </form>
+        </div>
+    </dialog>
+
+    <script>
+        (function () {
+          const trigger = document.getElementById('show-email');
+          const dialog  = document.getElementById('email-dialog');
+          const emailInput = document.getElementById('email-address');
+          const copyBtn = document.getElementById('copy-email');
+        
+          // Open dialog
+          trigger.addEventListener('click', () => {
+            if (dialog.showModal) {
+              dialog.showModal();
+              emailInput.focus();
+              emailInput.select();
+            } else {
+              // Fallback if <dialog> not supported
+              navigator.clipboard?.writeText(emailInput.value);
+              alert(emailInput.value);
+            }
+          });
+        
+          // Copy email
+          copyBtn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(emailInput.value);
+              const prev = copyBtn.textContent;
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => (copyBtn.textContent = prev), 1200);
+            } catch {
+              emailInput.select();
+            }
+          });
+        
+          // Close when clicking the backdrop (outside the card)
+          dialog.addEventListener('click', (e) => {
+            if (e.target === dialog) dialog.close();
+          });
+        
+          // Close on Escape (most browsers do this automatically, but this is extra-safe)
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && dialog.open) dialog.close();
+          });
+        })();
+    </script>
+        
+</body>
+</html>
