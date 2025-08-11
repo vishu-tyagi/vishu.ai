@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vishu.ai Blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="active-tags-container" class="hidden">
+            <span id="clear-all" class="tag clear-all">
+                <i class="fas fa-times"></i> Clear all
+            </span>
+            <div id="active-tags"></div>
+        </div>
+
+        <div id="blog-posts">
+            
+            <article class="blog-post" data-tags="bayesian python jax numpyro">
+                <div class="post-header">
+                    <h2><a href="posts/reparam-mvn.html">Reparameterizing Multivariate Normal Distribution</a></h2>
+                    <span class="post-date"><i class="far fa-calendar-alt"></i> March 19, 2025</span>
+                </div>
+                <p class="post-excerpt">A tutorial on reparameterizing multivariate normal distribution using JAX and NumPyro.</p>
+                <div class="post-tags">
+                    <span class="tag clickable-tag" data-tag="bayesian"><i class="fas fa-tag"></i> Bayesian</span>
+                    <span class="tag clickable-tag" data-tag="python"><i class="fas fa-tag"></i> Python</span>
+                    <span class="tag clickable-tag" data-tag="jax"><i class="fas fa-tag"></i> JAX</span>
+                    <span class="tag clickable-tag" data-tag="numpyro"><i class="fas fa-tag"></i> NumPyro</span>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright &copy; 2025, Vishweshwar Tyagi</p>
+        <p>Contact: <a href="mailto:vt2353@columbia.edu">vt2353@columbia.edu</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const blogPosts = document.querySelectorAll('.blog-post');
+          const activeTagsContainer = document.getElementById('active-tags');
+          const activeTagsContainerWrapper = document.getElementById('active-tags-container');
+          const clearAllButton = document.getElementById('clear-all');
+          const clickableTags = document.querySelectorAll('.clickable-tag');
+          const activeTags = new Set();
+        
+          // Make list-page tags clickable & keyboard-friendly
+          clickableTags.forEach(tag => {
+            tag.setAttribute('role', 'button');
+            tag.setAttribute('tabindex', '0');
+            tag.addEventListener('click', () => toggleTag(tag.dataset.tag));
+            tag.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleTag(tag.dataset.tag);
+              }
+            });
+          });
+        
+          // Clear all
+          clearAllButton.setAttribute('role', 'button');
+          clearAllButton.setAttribute('tabindex', '0');
+          clearAllButton.addEventListener('click', clearAllTags);
+          clearAllButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              clearAllTags();
+            }
+          });
+        
+          function toggleTag(tag) {
+            if (activeTags.has(tag)) activeTags.delete(tag);
+            else activeTags.add(tag);
+            updateActiveTagsDisplay();
+            filterPosts();
+          }
+        
+          function clearAllTags() {
+            activeTags.clear();
+            updateActiveTagsDisplay();
+            filterPosts();
+          }
+        
+          function updateActiveTagsDisplay() {
+            activeTagsContainer.innerHTML = '';
+        
+            if (activeTags.size > 0) {
+              activeTagsContainerWrapper.classList.remove('hidden');
+        
+              activeTags.forEach(tag => {
+                const chip = document.createElement('span');
+                chip.className = 'tag active-tag';
+                chip.setAttribute('role', 'button');
+                chip.setAttribute('tabindex', '0');
+        
+                // Text
+                chip.append(document.createTextNode(formatTagName(tag) + ' '));
+                // X icon
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-times';
+                chip.append(icon);
+        
+                const remove = () => toggleTag(tag);
+                chip.addEventListener('click', remove);
+                chip.addEventListener('keydown', (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    remove();
+                  }
+                });
+        
+                activeTagsContainer.appendChild(chip);
+              });
+            } else {
+              activeTagsContainerWrapper.classList.add('hidden');
+            }
+          }
+        
+          function filterPosts() {
+            if (activeTags.size === 0) {
+              blogPosts.forEach(post => post.style.display = '');
+              return;
+            }
+            blogPosts.forEach(post => {
+              const postTags = (post.dataset.tags || '').split(' ').filter(Boolean);
+              const hasAll = [...activeTags].every(t => postTags.includes(t));
+              post.style.display = hasAll ? '' : 'none';
+            });
+          }
+        
+          function formatTagName(tag) {
+            return tag.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          }
+        });
+    </script>
+  
+</body>
+</html>

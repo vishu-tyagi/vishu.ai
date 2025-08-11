@@ -294,7 +294,7 @@ footer {
 /* Backdrop */
 #email-dialog::backdrop {
     background: rgba(0,0,0,.45);
-  }
+}
   
 /* Hidden by default */
 #email-dialog {

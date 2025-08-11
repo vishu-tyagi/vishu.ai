@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multivariate Normal Reparameterization in NumPyro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/blog-post.css">
+</head>
+<body>
+<article class="blog-content">
+  <h1>Multivariate Normal Reparameterization in NumPyro</h1>
+  <p><strong>Posted on:</strong> March 19, 2025</p>
+
+  <p>
+    Reparameterization is a core technique in variational inference and HMC-based samplers for Bayesian modeling. 
+    Here, we revisit the multivariate normal distribution (MVN) and show how to rewrite it in a form that decouples
+    mean and correlation, which can improve sampling efficiency.
+  </p>
+
+  <h2>Background</h2>
+  <p>
+    A multivariate normal distribution with mean vector \( \boldsymbol{\mu} \in \mathbb{R}^d \) 
+    and covariance matrix \( \boldsymbol{\Sigma} \in \mathbb{R}^{d \times d} \) is written as:
+  </p>
+  <p>
+    \[
+    \mathbf{y} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})
+    \]
+  </p>
+  <p>
+    This can be reparameterized as:
+    \[
+    \mathbf{y} = \boldsymbol{\mu} + L \mathbf{z}, \quad \text{where } \mathbf{z} \sim \mathcal{N}(0, I), \text{ and } LL^\top = \boldsymbol{\Sigma}
+    \]
+    Here, \( L \) is the (lower-triangular) Cholesky factor of the covariance \( \boldsymbol{\Sigma} \), which exists and is unique when \( \boldsymbol{\Sigma} \) is symmetric positive-definite.
+  </p>
+
+  <h2>Implementation in NumPyro</h2>
+  <p>Here's a minimal working example of this in <code>jax</code> and <code>numpyro</code>:</p>
+
+  <div class="code-block">
+    <button class="copy-button" type="button">Copy</button>
+    <pre><code>import jax.numpy as jnp
+from jax import random
+from numpyro.distributions import MultivariateNormal
+
+# Setup
+key = random.PRNGKey(0)
+num_samples = 1000
+dim = 3
+
+# Generate mean and covariance
+key, subkey = random.split(key)
+mu = random.normal(subkey, (dim,))
+A = random.normal(subkey, (dim, dim))
+cov = A @ A.T  # ensure positive-definite
+
+# Sample directly
+samples = MultivariateNormal(mu, cov).sample(subkey, (num_samples,))
+</code></pre>
+  </div>
+
+  <h2>Reparameterized Sampling</h2>
+  <p>
+    To sample using the reparameterized form \( \mathbf{y} = \boldsymbol{\mu} + L\mathbf{z} \),
+    compute the Cholesky decomposition of \( \boldsymbol{\Sigma} \), and draw standard normal noise:
+  </p>
+
+  <div class="code-block">
+    <button class="copy-button" type="button">Copy</button>
+<pre><code>L = jnp.linalg.cholesky(cov)
+
+key, subkey = random.split(key)
+z = random.normal(subkey, (num_samples, dim))
+samples_reparam = mu + z @ L.T
+</code></pre>
+  </div>
+
+  <h2>Visual Validation</h2>
+  <p>We can confirm the two methods produce equivalent samples by comparing pairwise plots (code omitted for brevity).</p>
+
+  <figure class="post-figure narrow">
+    <img src="../assets/notebooks/reparam_mvn.png"
+    alt="Pairwise comparison of direct vs reparameterized samples across dimensions"
+    width="1600" height="1200" loading="lazy" decoding="async">
+    <figcaption>
+      Figure 1. Pairwise plots show large overlap between direct and reparameterized samples.
+    </figcaption>
+  </figure>
+
+  <p>
+    This reparameterization is especially useful in hierarchical Bayesian models, where decoupling location and scale improves posterior geometry.
+  </p>
+</article>
+
+<!-- Load MathJax only if TeX is present -->
+<script defer>
+  (function () {
+    const hasTeX = /\$[^$]+\$|\\\(|\\\[|\\begin\{.*?}/.test(document.body.innerHTML);
+    if (!hasTeX) return;
+    const s = document.createElement('script');
+    s.id = 'MathJax-script';
+    s.async = true;
+    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+    document.head.appendChild(s);
+  })();
+</script>
+
+<!-- Copy buttons -->
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.copy-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // const code = btn.nextElementSibling.innerText;
+        const code = btn.nextElementSibling.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const prev = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => (btn.textContent = prev), 1500);
+        }).catch(() => {
+          // Fallback: select text if clipboard API fails
+          const range = document.createRange();
+          range.selectNodeContents(btn.nextElementSibling);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+numpy==1.24.2
+pandas==2.0.2
+matplotlib==3.7.0
+seaborn==0.12.2
+jupyter==1.0.0
+scikit-learn==1.2.1
+scikit-fda==0.9.1
+jax[cpu]==0.4.38
+numpyro[cpu]==0.16.1
