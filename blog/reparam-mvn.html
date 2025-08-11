@@ -11,11 +11,11 @@
   <header class="main-header">
     <nav class="main-nav">
         <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../index.html" class="active">Blog</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog/" class="active">Blog</a></li>
         </ul>
     </nav>
-  </header>
+
 <article class="blog-content">
   <h1>Multivariate Normal Reparameterization in NumPyro</h1>
   <p><strong>Posted on:</strong> March 19, 2025</p>
@@ -89,7 +89,7 @@ samples_reparam = mu + z @ L.T
   <p>We can confirm the two methods produce equivalent samples by comparing pairwise plots (code omitted for brevity).</p>
 
   <figure class="post-figure narrow">
-    <img src="../../assets/notebooks/reparam_mvn.png"
+    <img src="/assets/notebooks/reparam_mvn.png"
     alt="Pairwise comparison of direct vs reparameterized samples across dimensions"
     width="1600" height="1200" loading="lazy" decoding="async">
     <figcaption>
