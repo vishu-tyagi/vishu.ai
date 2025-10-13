@@ -29,7 +29,7 @@
   <h2>Background</h2>
   <p>
     A multivariate normal distribution with mean vector \( \boldsymbol{\mu} \in \mathbb{R}^d \) 
-    and covariance matrix \( \boldsymbol{\Sigma} \in \mathbb{R}^{d \times d} \) is written as:
+    and covariance matrix \( \boldsymbol{\Sigma} \in \mathbb{R}^{d \times d} \) is written as
   </p>
   <p>
     \[
@@ -37,7 +37,7 @@
     \]
   </p>
   <p>
-    This can be reparameterized as:
+    This can be reparameterized as
     \[
     \mathbf{y} = \boldsymbol{\mu} + L \mathbf{z}, \quad \text{where } \mathbf{z} \sim \mathcal{N}(0, I), \text{ and } LL^\top = \boldsymbol{\Sigma}
     \]
@@ -45,7 +45,7 @@
   </p>
 
   <h2>Implementation in NumPyro</h2>
-  <p>Here's a minimal working example of this in <code>jax</code> and <code>numpyro</code>:</p>
+  <p>Here's a minimal working example of this in <code>jax</code> and <code>numpyro</code></p>
 
   <div class="code-block">
     <button class="copy-button" type="button">Copy</button>
@@ -98,7 +98,7 @@ samples_reparam = mu + z @ L.T
   </figure>
 
   <p>
-    This reparameterization is especially useful in hierarchical Bayesian models, where decoupling location and scale improves posterior geometry.
+    This reparameterization is useful in hierarchical Bayesian models, where decoupling location and scale improves posterior geometry.
   </p>
 </article>
 
