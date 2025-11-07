@@ -1,71 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vishu.ai Home</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <title>Publications</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-    <header class="main-header">
-        <nav class="main-nav">
-            <ul>
-                <li><a href="/" class="active">Home</a></li>
-                <li><a href="/blog">Blog</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header class="main-header">
+    <nav class="top-nav">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="/published/" class="active">Publications</a>
+    </nav>
+  </header>
 
-    <main>
-        <section id="papers">
-            <h2 class="section-header"><i class="far fa-file-alt"></i> Papers</h2>
-           
-            <article class="publication">
-                <h3>2025</h3>
-                <p><strong>Tyagi, V.</strong>, Murray, L. M., Asan, A. S., Mandigo, C., Virk, M. S., Harel, N. Y., Carmel, J. B., & McIntosh, J. R. (2025). <em>Hierarchical Bayesian estimation of motor-evoked potential recruitment curves yields accurate and robust estimates.</em> Brain Stimulation. <a href="https://doi.org/10.1016/j.brs.2025.09.008" target="_blank" rel="noopener">[DOI]</a> <a href="/published/hbmep.pdf" target="_blank" rel="noopener">[PDF]</a></p>
-            </article>
+  <main>
+    <h3>Published</h3>
+    <table>
+      <tr>
+        <td class="year">2025</td>
+        <td class="cite">
+          <strong>Tyagi, V.</strong>, Murray, L. M., Asan, A. S., Mandigo, C., Virk, M. S., Harel, N. Y., Carmel, J. B., &amp; McIntosh, J. R. (2025).
+          <em>Hierarchical Bayesian estimation of motor-evoked potential recruitment curves yields accurate and robust estimates.</em>
+          Brain Stimulation.
+          <a href="https://doi.org/10.1016/j.brs.2025.09.008" target="_blank" rel="noopener">DOI</a> |
+          <a href="/published/hbmep.pdf" target="_blank" rel="noopener">PDF</a>
+        </td>
+      </tr>
+    </table>
 
-        </section>
+    <h3>Under review</h3>
+    <table>
+      <!-- Add rows like:
+      <tr>
+        <td class="year">2025</td>
+        <td class="cite">
+          Author(s). (Year). <em>Title.</em> Journal (submitted).
+          <a href="...">arXiv</a> | <a href="...">PDF</a>
+        </td>
+      </tr>
+      -->
+    </table>
 
-        <section id="software">
-            <h2 class="section-header"><i class="fas fa-code"></i> Software</h2>
+    <h3>In preparation</h3>
+    <table>
+      <!-- Add rows like:
+      <tr>
+        <td class="year">2025</td>
+        <td class="cite">
+          Author(s). (Year). <em>Working title.</em> Manuscript in preparation.
+        </td>
+      </tr>
+      -->
+    </table>
+  </main>
 
-            <article class="software">
-                <h3>hbMEP</h3>
-                <p>Python library for hierarchical Bayesian estimation of motor-evoked potential (MEP) size recruitment curves. <a href="https://github.com/hbmep/hbmep" target="_blank">[GitHub]</a> <a href="https://hbmep.github.io/hbmep/" target="_blank">[Docs]</a></p>
-            </article>
-
-        </section>
-
-        <section id="news">
-            <h2 class="section-header"><i class="fas fa-newspaper"></i> News</h2>
-            
-            <article class="news-item">
-                <h3>October 2025</h3>
-                <p>hbMEP published in <em>Brain Stimulation</em>. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-publishes-new-bayesian-modeling-study-brain-stimulation" target="_blank" rel="noopener">[Details]</a> <a href="https://doi.org/10.1016/j.brs.2025.09.008" target="_blank" rel="noopener">[DOI]</a></p>
-
-                <h3>March 2025</h3>
-                <p>Carmel Lab awarded NIH R03 grant to extend hbMEP for real-time, adaptive construction of MEP recruitment curves, with the goal of optimizing experimental design by reducing the number of stimuli and shortening session duration. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-awarded-nih-grant-develop-enhanced-tool-measure-movement-physiology" target="_blank" rel="noopener">[Details]</a></p>
-            </article>
-
-            <article class="news-item">
-                <h3>October 2024</h3>
-                <p>Gave a talk titled <em>“Hierarchical Bayesian estimation of motor-evoked potential recruitment curves yields accurate and robust estimates”</em> at the <em>Society for Neuroscience (SfN) Nanosymposium on Analytical Computational Tools</em>, Chicago. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-members-present-society-neuroscience-annual-conference-2024" target="_blank" rel="noopener">[Details]</a></p>
- 
-                <h3>May 2024</h3>
-                <p>Received poster award at the <em>11th Annual Minnesota Neuromodulation Symposium</em> for the presentation <em>“Motor evoked potential recruitment curve analysis using hierarchical Bayesian modeling yields accurate and robust estimates.”</em> <a href="/assets/mn_neuromodulation_award_2024.jpg" target="_blank" rel="noopener">[View award]</a></p>
-
-                <h3>March 2024</h3>
-                <p>Carmel Lab awarded $1.25M CDMRP grant (3 years) to study spinal cord stimulation for restoring arm and hand function after injury. hbMEP will support analysis and optimization of stimulation parameters, including electrode position, orientation, and size. <a href="https://www.weinberg.cuimc.columbia.edu/news/movement-recovery-lab-receives-1-25-million-cdmrp-grant" target="_blank" rel="noopener">[Details]</a></p>
-            </article>
-        </section>
-    </main>
-
-    <footer>
-        <p>Copyright &copy; 2025, Vishweshwar Tyagi</p>
-        <p>Contact: <a href="mailto:vt2353@columbia.edu">vt2353@columbia.edu</a></p>
-    </footer>
-        
+  <footer>
+    <p>Copyright &copy; 2025, Vishweshwar Tyagi</p>
+    <p>Contact: <a href="mailto:vt2353@columbia.edu">vt2353@columbia.edu</a></p>
+  </footer>
 </body>
 </html>
