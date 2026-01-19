@@ -24,8 +24,8 @@ direct = dist.MultivariateNormal(mu, cov).sample(sub, (num_samples,))
 L = jnp.linalg.cholesky(cov)    # (d, d)
 
 # Generate samples with reparametrization
-key, subkey = random.split(key)
-z = random.normal(subkey, (num_samples, dim))   # (N, d)
+key, sub = random.split(key)
+z = random.normal(sub, (num_samples, dim))   # (N, d)
 reparam = mu + jnp.einsum("ij,nj->ni", L, z)
 
 import numpy as np
