@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Multivariate Normal Reparameterization in NumPyro</title>
+  <title>Reparametrizing a Multivariate Normal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="stylesheet" href="../../css/blog-post.css">
@@ -17,31 +17,43 @@
   </header>
 
 <article class="blog-content">
-  <h1>Multivariate Normal Reparameterization in NumPyro</h1>
+  <h1>Reparametrizing a Multivariate Normal</h1>
   <p><strong>Posted on:</strong> March 19, 2025</p>
-
   <p>
-    Reparameterization is a core technique in variational inference and HMC-based samplers for Bayesian modeling. 
-    Here, we revisit the multivariate normal distribution (MVN) and show how to rewrite it in a form that decouples
-    mean and correlation, which can improve sampling efficiency.
-  </p>
-
-  <h2>Background</h2>
-  <p>
-    A multivariate normal distribution with mean vector \( \boldsymbol{\mu} \in \mathbb{R}^d \) 
-    and covariance matrix \( \boldsymbol{\Sigma} \in \mathbb{R}^{d \times d} \) is written as
+    A multivariate normal \(y\in \mathbb{R}^d\) with mean \( \mu \in \mathbb{R}^d \) and covariance matrix \( \Sigma \in \mathbb{R}^{d \times d} \) is written as
   </p>
   <p>
-    \[
-    \mathbf{y} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})
-    \]
+  \begin{align}
+    y &\sim \mathcal{N}(\mu, \Sigma) \label{eq-1}
+  \end{align}
   </p>
   <p>
-    This can be reparameterized as
-    \[
-    \mathbf{y} = \boldsymbol{\mu} + L \mathbf{z}, \quad \text{where } \mathbf{z} \sim \mathcal{N}(0, I), \text{ and } LL^\top = \boldsymbol{\Sigma}
-    \]
-    Here, \( L \) is the (lower-triangular) Cholesky factor of the covariance \( \boldsymbol{\Sigma} \), which exists and is unique when \( \boldsymbol{\Sigma} \) is symmetric positive-definite.
+    Here, by definition, the covariance matrix is symmetric positive definite, and therefore has a unique Cholesky factorization \(\Sigma = L L^T\), where \(L \in \mathbb{R}^{d\times d}\) is a lower triangular matrix with positive diagonal entries.
+  </p>
+  <p>
+    Now, consider
+  </p>
+  <p>
+    \begin{align}
+    z &\sim \mathcal{N}(0, I_d)
+    \\[6pt]
+    Lz &\sim \mathcal{N}\!\left(0, L I_d L^T\right)
+    \\[6pt]
+    &= \mathcal{N}\!\left(0, L L^T\right)
+    \\[6pt]
+    &= \mathcal{N}\!\left(0, \Sigma\right)
+    \end{align}
+  </p>
+  <p>
+    where \(I_d\) is the d-dimensional identity matrix. Therefore,
+  </p>
+  <p>
+    \begin{align}
+    \mu + Lz &\sim \mathcal{N}\!\left(\mu, \Sigma\right) \label{eq-2}
+    \end{align}
+  </p>
+  <p>
+    Hence, Eq. \eqref{eq-2} provides a reparametrization of Eq. \eqref{eq-1}.
   </p>
 
   <h2>Implementation in NumPyro</h2>
@@ -51,42 +63,47 @@
     <button class="copy-button" type="button">Copy</button>
     <pre><code>import jax.numpy as jnp
 from jax import random
-from numpyro.distributions import MultivariateNormal
+from numpyro import distributions as dist
 
 # Setup
 key = random.PRNGKey(0)
-num_samples = 1000
-dim = 3
+num_samples = 1000  # N = 1_000
+dim = 3             # d = 3
 
-# Generate mean and covariance
-key, subkey = random.split(key)
-mu = random.normal(subkey, (dim,))
-A = random.normal(subkey, (dim, dim))
-cov = A @ A.T  # ensure positive-definite
+# Generate mean
+key, sub = random.split(key)
+mu = random.normal(sub, (dim,))
 
-# Sample directly
-samples = MultivariateNormal(mu, cov).sample(subkey, (num_samples,))
+# Generate covariance
+key, sub = random.split(key)
+A = random.normal(sub, (dim, dim))
+cov = A @ A.T   # ensure positive definite
+
+# Generate samples directly
+key, sub = random.split(key)
+direct = dist.MultivariateNormal(mu, cov).sample(sub, (num_samples,))
 </code></pre>
   </div>
 
   <h2>Reparameterized Sampling</h2>
   <p>
-    To sample using the reparameterized form \( \mathbf{y} = \boldsymbol{\mu} + L\mathbf{z} \),
-    compute the Cholesky decomposition of \( \boldsymbol{\Sigma} \), and draw standard normal noise
+    To sample using the reparameterized form in Eq. \eqref{eq-2}, we compute the Cholesky decomposition of \( \Sigma\), and draw samples from the standard normal
   </p>
 
   <div class="code-block">
     <button class="copy-button" type="button">Copy</button>
-<pre><code>L = jnp.linalg.cholesky(cov)
+<pre><code># Lower Cholesky factor 
+L = jnp.linalg.cholesky(cov)    # (d, d)
 
+# Generate samples with reparametrization
 key, subkey = random.split(key)
-z = random.normal(subkey, (num_samples, dim))
-samples_reparam = mu + z @ L.T
+z = random.normal(subkey, (num_samples, dim))   # (N, d)
+reparam = mu + jnp.einsum("ij,nj->ni", L, z)
 </code></pre>
   </div>
 
   <h2>Visual Validation</h2>
-  <p>We can confirm the two methods produce equivalent samples by comparing pairwise plots (code omitted for brevity).</p>
+  <p>We can confirm the two methods produce equivalent samples by comparing pairwise plots (code omitted).</p>
 
   <figure class="post-figure narrow">
     <img src="/assets/notebooks/reparam_mvn.png"
@@ -98,7 +115,7 @@ samples_reparam = mu + z @ L.T
   </figure>
 
   <p>
-    This reparameterization is useful in hierarchical Bayesian models, where decoupling location and scale improves posterior geometry.
+    I have found this reparametrization to be useful when fitting hierarchical Bayesian models.
   </p>
 </article>
 
@@ -107,6 +124,16 @@ samples_reparam = mu + z @ L.T
   (function () {
     const hasTeX = /\$[^$]+\$|\\\(|\\\[|\\begin\{.*?}/.test(document.body.innerHTML);
     if (!hasTeX) return;
+
+    // MathJax configuration MUST be set before MathJax is loaded
+    window.MathJax = {
+      tex: {
+        packages: { '[+]': ['ams'] }, // enables align, etc.
+        tags: 'all'                   // auto-number all display math
+        // tags: 'ams'                // alternative: AMS-style numbering
+      }
+    };
+
     const s = document.createElement('script');
     s.id = 'MathJax-script';
     s.async = true;
