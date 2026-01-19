@@ -85,9 +85,9 @@ direct = dist.MultivariateNormal(mu, cov).sample(sub, (num_samples,))
 </code></pre>
   </div>
 
-  <h2>Reparameterized Sampling</h2>
+  <h2>Reparametrized Sampling</h2>
   <p>
-    To sample using the reparameterized form in Eq. \eqref{eq-2}, we compute the Cholesky decomposition of \( \Sigma\), and draw samples from the standard normal
+    To sample using the reparametrized form in Eq. \eqref{eq-2}, we compute the Cholesky decomposition of \( \Sigma\), and draw samples from the standard normal
   </p>
 
   <div class="code-block">
@@ -107,10 +107,10 @@ reparam = mu + jnp.einsum("ij,nj->ni", L, z)
 
   <figure class="post-figure narrow">
     <img src="/assets/notebooks/reparam_mvn.png"
-    alt="Pairwise comparison of direct vs reparameterized samples across dimensions"
+    alt="Pairwise comparison of direct vs reparametrized samples across dimensions"
     width="1600" height="1200" loading="lazy" decoding="async">
     <figcaption>
-      Figure 1. Pairwise plots show large overlap between direct and reparameterized samples.
+      Figure 1. Pairwise plots show large overlap between direct and reparametrized samples.
     </figcaption>
   </figure>
 
