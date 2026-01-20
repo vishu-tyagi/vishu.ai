@@ -4,8 +4,8 @@ from numpyro import distributions as dist
 
 # Setup
 key = random.PRNGKey(0)
-num_samples = 1000  # N = 1_000
-dim = 3             # d = 3
+num_samples = 10_000    # N = 10_000
+dim = 3                 # d = 3
 
 # Generate mean
 key, sub = random.split(key)

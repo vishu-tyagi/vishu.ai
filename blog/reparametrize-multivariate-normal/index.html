@@ -28,7 +28,7 @@
   \end{align}
   </p>
   <p>
-    Here, by definition, the covariance matrix is symmetric positive definite, and therefore has a unique Cholesky factorization \(\Sigma = L L^T\), where \(L \in \mathbb{R}^{d\times d}\) is a lower triangular matrix with positive diagonal entries.
+    Here, assuming the covariance matrix is symmetric positive definite, there exists a unique Cholesky factorization \(\Sigma = L L^T\), where \(L \in \mathbb{R}^{d\times d}\) is a lower triangular matrix with positive diagonal entries.
   </p>
   <p>
     Now, consider
@@ -67,8 +67,8 @@ from numpyro import distributions as dist
 
 # Setup
 key = random.PRNGKey(0)
-num_samples = 1000  # N = 1_000
-dim = 3             # d = 3
+num_samples = 10_000    # N = 10_000
+dim = 3                 # d = 3
 
 # Generate mean
 key, sub = random.split(key)
